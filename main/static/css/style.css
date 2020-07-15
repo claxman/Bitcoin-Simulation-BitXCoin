@@ -1,0 +1,22 @@
+body {
+	font-family: 'Aldrich', sans-serif;
+}
+
+.btnColor{
+	background-color: lightcoral !important;
+	border-color: lightcoral !important;
+	color: white !important;
+}
+
+.form-control:focus {
+	border-color: lightcoral;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 10px lightcoral;
+}
+
+.footerColor{
+	color: lightcoral !important;
+}
+
+.jumboColor{
+	color: lightslategrey !important;
+}

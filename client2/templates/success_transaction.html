@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+
+    $(document).ready(function(){
+
+        $("#success_transaction_modal").modal('show');
+
+    });
+
+</script>
+
+<!-- Alert Message for successful transaction -->
+    <div class="modal modal-alert fade" id="success_transaction_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="alert alert-success" role="alert">
+              <h4 class="alert-heading">Successful Transaction!</h4>
+              <p>You successfully completed your transaction. It will be added to the next block.</p>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="button_confirm_transaction" class="btn btn-success" data-dismiss="modal">OK</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+<br><br>
+<div class="container">
+    <div class="jumbotron">
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <h1 class="card-title"><span style="color: lightcoral;">Send Coins!</span></h1>
+                    <p class="lead">Enter transaction details and click on "Generate Transaction" button to generate your transaction.</p>
+                    <hr class="my-4">
+                </div>
+            </div>
+        </div>
+
+        <form action="{{url_for('generate_transaction')}}", method="POST">
+            <div class="form-group">
+                <label for="PublicKey">Sender Public Key:</label>
+                <input id="PublicKey" class="form-control" type="text" name="sender_public_key" required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="PrivateKey">Sender Private Key:</label>
+                <input id="PrivateKey" class="form-control" type="text" name="sender_private_key" required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="RPublicKey">Recipient Public Key:</label>
+                <input id="RPublicKey" class="form-control" type="text" name="recipient_public_key" required>
+            </div>
+
+            <br>
+            
+            <div class="form-group">
+                <label for="TransactionAmount">Amount to Send:</label>
+                <input id="TransactionAmount" class="form-control" type="text" name="amount" required>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="BlockUrl">Blockchain Node URL:</label>
+                <input id="BlockUrl" class="form-control" type="text" name="blockUrl" value="http://127.0.0.1:5001" required>
+            </div>
+
+            <br>
+
+            <div class="text-center">
+                <button class="btn btn-secondary btn-lg" type="submit">Generate Transaction</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

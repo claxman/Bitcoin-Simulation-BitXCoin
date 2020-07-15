@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br><br>
+<div class="container">
+    <div class="jumbotron">
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <h1 class="card-title"><span style="color: lightcoral;">Confirmation</span></h1>
+                    <p class="lead">Confirm transaction details and click on <u><span style="color: red;">"Confirm Transaction"</span></u> to finalize your transaction.</p>
+                    <hr class="my-4">
+                </div>
+            </div>
+        </div>
+
+        <form action="{{blockUrl}}/transactions/new" method="POST">
+            <div class="form-group">
+                <label for="PublicKey">Sender Public Key:</label>
+                <input id="PublicKey" class="form-control" type="text" name="sender_public_key" value="{{sender_public_key}}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="RPublicKey">Recipient Public Key:</label>
+                <input id="RPublicKey" class="form-control" type="text" name="recipient_public_key" value="{{recipient_public_key}}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="TransactionAmount">Amount to Send:</label>
+                <input id="TransactionAmount" class="form-control" type="text" name="amount" value="{{amount}}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="TransactionSignature">Transaction Signature:</label>
+                <input id="TransactionSignature" class="form-control" type="text" name="signature" value="{{signature}}" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="BlockUrl">Blockchain Node URL:</label>
+                <input id="BlockUrl" class="form-control" type="text" name="blockUrl" value="{{blockUrl}}" readonly>
+            </div>
+
+            <div class="form-group">
+                <input id="BaseUrl" class="form-control" type="hidden" name="url" value="{{url}}" readonly>
+            </div>
+
+            <br>
+
+            <div class="text-center">
+                <a href="{{url_for('make_transaction')}}"><button class="btn btn-danger btn-lg mr-3" type="button">Cancel</button></a>
+                <button class="btn btn-success btn-lg" type="submit">Confirm Transaction</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+

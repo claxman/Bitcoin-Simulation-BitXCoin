@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <div class="card-body">
+            <h3 class="card-title"><span style="color: lightcoral;">Generated Keys</span></h3>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Public Key:</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" readonly>{{public_key}}</textarea>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Private Key:</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" readonly>{{private_key}}</textarea>
+        </div>
+        
+        <br>
+        
+        <div class="alert alert-warning" role="alert">
+            <br>
+            <span style="color: red;">IMPORTANT!</span>
+            <ul>
+                <br>
+                <li>Save you private and public keys. These keys cannot be recovered!</li>
+                <li>Don't share your private key with anyone!</li>
+                <br>
+             </ul>
+        </div>
+
+        <br>
+        <br>
+        <br>
+</div>
+
+
+
+{% endblock %}

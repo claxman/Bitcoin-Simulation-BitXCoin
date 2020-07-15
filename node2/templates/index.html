@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BitX Coin - Node2</title>
+    <link rel="icon" href="../static/icon.svg">
+    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/vendor/DataTables/css/datatables.min.css">
+    <link rel="stylesheet" href="/static/vendor/font-awesome/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/"><span style="color: lightcoral;">BitX Coin - Blockchain</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/configure">Configure</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://bitxcoin.herokuapp.com/">Support</a>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<br>
+
+    <div class="container">
+    
+        <div class="jumbotron text-center">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="card-body">
+                        <h2 class="card-title"><span style="color: lightcoral">Transactions to be added to the next block</span></h2>
+                        <button type="submit" id="refresh_transactions" class="btn btn-secondary">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <span style="font-size: small;"><table id="unmined_transactions_table" class="table table-bordered" cellspacing="0" width="100%">
+
+            </table></span>
+    
+            <div class="col-lg-12 text-center">
+                <input type="button" id="mine_button" class="btn btn-secondary btn-lg" value="Mine">
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="jumbotron text-center">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="card-body">
+                        <h2 class="card-title"><span style="color: lightcoral">Transactions on the blockchain</span></h2>
+                        <button type="submit" id="refresh_blockchain" class="btn btn-secondary">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+            <span style="font-size: small;"><table id="transactions_table" class="table table-bordered" cellspacing="0" width="100%">
+
+            </table></span>
+    </div>
+
+    <br><br><br><br>
+
+<footer class="py-3">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center flex-column flex-md-row border-bottom pb-2">
+        <h5 class="ml-0 ml-md-3 mb-0"><a href="{{url_for('index')}}"><span style="color: lightcoral;">BitX Coin - Blockchain</span></a></h5>
+        <ul class="nav justify-content-center">
+          <li class="nav-item"><a class="nav-link" href="{{url_for('index')}}"><span style="color: black;">Home</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><span style="color: black;">Config</span></a></li>
+        </ul>
+      </div>
+      <div class="d-flex justify-content-center align-items-center justify-content-md-between flex-column flex-md-row mx-3 mt-3">
+        <div class="d-flex"><a href="https://linkedin.com/in/chaitanyalaxman" target="_blank"><img width="16" height="16" class="mr-3" src="../static/linkedin.svg" alt=""></a><a href="https://github.com/claxman/" target="_blank"><img width="16" height="16" class="mr-3" src="../static/github.svg" alt=""></a><a href="https://instagram.com/chaitanyalaxman" target="_blank"><img width="16" height="16" class="mr-3" src="../static/instagram.svg" alt=""></a></div>
+        <div class="d-flex mt-3 mt-md-0">
+          <p class="mb-0 small text-muted">© 2020 Chaitanya Laxman. All right reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/vendor/DataTables/js/datatables.min.js"></script>
+    <script src="/static/vendor/DataTables/js/ellipsis.js"></script>
+
+    <script>
+        $(function() {
+
+            $.ajax({
+                url: "/chain",
+                type: "GET",
+                success: function(response) {
+                    let transactions = []
+                    let count = 1
+
+                    for (i=0; i<response['length']; i++) {
+                        for (j=0; j<response['chain'][i]['transactions'].length; j++) {
+                            let options = {  year: "numeric", month: "short",  day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"  };
+                            let date = new Date(response["chain"][i]["timestamp"] * 1000);
+                            formattedTimestamp = date.toLocaleTimeString('en-US', options);
+
+                            let transaction = [
+                                count,
+                                response['chain'][i]['transactions'][j]['sender_public_key'],
+                                response['chain'][i]['transactions'][j]['recipient_public_key'],
+                                response['chain'][i]['transactions'][j]['amount'],
+                                formattedTimestamp,
+                                response['chain'][i]['block_number']
+                            ]
+
+                            transactions.push(transaction);
+                            count += 1;
+                        }
+                    }
+
+                    $('#transactions_table').dataTable({
+                        data: transactions,
+                        columns: [
+                            {title: "#"},
+                            {title: "Sender Public Key"},
+                            {title: "Recipient Public Key"},
+                            {title: "Amount"},
+                            {title: "Timestamp"},
+                            {title: "Block#"},
+
+                        ],
+                        columnDefs: [{targets: [1,2,3,4,5], render: $.fn.dataTable.render.ellipsis(25)}]
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+
+
+            $.ajax({
+                url: "/transactions/get",
+                type: "GET",
+                success: function(response) {
+
+                    let transactions = []
+                    let count = 1
+
+                    for (i=0; i<response['transactions'].length; i++) {
+
+                        let transaction = [
+                            count,
+                            response['transactions'][i]['sender_public_key'],
+                            response['transactions'][i]['recipient_public_key'],
+                            response['transactions'][i]['amount'],
+                        ]
+
+                        transactions.push(transaction);
+
+                        count += 1;
+                    }
+
+                    $('#unmined_transactions_table').dataTable({
+                        data: transactions,
+                        columns: [
+                            {title: "#"},
+                            {title: "Sender Public Key"},
+                            {title: "Recipient Public Key"},
+                            {title: "Amount"},
+                        ],
+                        columnDefs: [{targets: [1,2,3], render: $.fn.dataTable.render.ellipsis(25)}]
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+            $('#mine_button').click(function() {
+                $.ajax({
+                    url: '/mine',
+                    type: 'GET',
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+
+                });
+            });
+
+            $('#refresh_transactions').click(function() {
+                window.location.reload();
+            });
+
+            $('#refresh_blockchain').click(function() {
+                $.ajax({
+                    url: '/nodes/resolve',
+                    type: 'GET',
+                    success: function(response) {
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

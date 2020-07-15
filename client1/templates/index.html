@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<br><br>
+<div class="container">
+    <div class="jumbotron text-center">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <h1 class="card-title"><span style="color: lightcoral;">Wallet Generator!</span></h1>
+                    <p class="lead">Generate encrypted public and private key.</p>
+                    <hr class="my-4">
+                    <p class="card-text">Click on the button below to generate your blockchain wallet.</p>
+                    <a href="{{url_for('new_wallet')}}" class="btn btn-secondary btn-lg"> Generate Wallet</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

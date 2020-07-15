@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BitX Coin - Node2</title>
+    <link rel="icon" href="../static/icon.svg">
+    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/vendor/DataTables/css/datatables.min.css">
+    <link rel="stylesheet" href="/static/vendor/font-awesome/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/"><span style="color: lightcoral;">BitX Coin - Blockchain</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/configure">Configure</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://bitxcoin.herokuapp.com/">Support</a>
+              </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <br>
+
+
+    <!-- Add nodes -->
+    <div class="container">
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card-body">
+            <h2 class="card-title"><span style="color: lightcoral">Add Blockchain nodes</span></h2>
+            <p class="card-text">Enter a list of Blockchain node URLs separated by comma and click on <span style="color: red;">"Add Node"</span> button to add them to the list of nodes</p>
+          </div>
+        </div>
+      </div>
+
+    <div class="container alert alert-secondary">
+      <form id="node_form">
+        <div class="row">
+          <label class="col-sm-2">Node URLs:</label>
+          <div class="col-sm-10">
+            <input type="text" name="nodes" id="nodes" rows="2" class="form-control">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <input type="button" id="add_node_button" class="btn btn-secondary btn-lg" value="Add Node">
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+</div>
+    <hr>
+
+    <!-- List of nodes -->
+    <div class="container">
+        <div class="jumbotron">
+      <div class="row">
+
+        <div class="col-lg-12">
+          <div class="card-body">
+            <h4 class="card-title">This node can retrieve Blockchain data from the following nodes:</h4>
+          </div>
+        </div>
+
+        <div class="col-lg-12" id="list_nodes">
+
+        </div>
+
+      </div>
+    </div>
+</div>
+<br><br><br><br>
+<footer class="py-3">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-column flex-md-row border-bottom pb-2">
+      <h5 class="ml-0 ml-md-3 mb-0"><a href="{{url_for('index')}}"><span style="color: lightcoral;">BitX Coin - Blockchain</span></a></h5>
+      <ul class="nav justify-content-center">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('index')}}"><span style="color: black;">Home</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span style="color: black;">Config</span></a></li>
+      </ul>
+    </div>
+    <div class="d-flex justify-content-center align-items-center justify-content-md-between flex-column flex-md-row mx-3 mt-3">
+      <div class="d-flex"><a href="https://linkedin.com/in/chaitanyalaxman" target="_blank"><img width="16" height="16" class="mr-3" src="../static/linkedin.svg" alt=""></a><a href="https://github.com/claxman/" target="_blank"><img width="16" height="16" class="mr-3" src="../static/github.svg" alt=""></a><a href="https://instagram.com/chaitanyalaxman" target="_blank"><img width="16" height="16" class="mr-3" src="../static/instagram.svg" alt=""></a></div>
+      <div class="d-flex mt-3 mt-md-0">
+        <p class="mb-0 small text-muted">© 2020 Chaitanya Laxman. All right reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/vendor/DataTables/js/datatables.min.js"></script>
+    <script src="/static/vendor/DataTables/js/ellipsis.js"></script>
+
+    <script>
+        $(function() {
+            $('#add_node_button').click(function() {
+                $.ajax({
+                    url: '/nodes/register',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $('#node_form').serialize(),
+                    success: function(response) {
+                        document.getElementById('nodes').value = '';
+                        window.location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $.ajax({
+                url: '/nodes/get',
+                type: 'GET',
+                success: function(response) {
+                    let nodes = '';
+                    for (i=0; i<response['nodes'].length; i++) {
+                        node = "<li><a href=http://" + response['nodes'][i] + ">" + response['nodes'][i] + "</a></li>"
+                        document.getElementById('list_nodes').innerHTML += node;
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

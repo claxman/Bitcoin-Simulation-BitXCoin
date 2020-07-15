@@ -11,6 +11,7 @@ similarly, there are 2 nodes
 
 
 ### Follow below instructions to simulate the network.
+* Access Support Page by clicking [here](https://bitxcoin.herokuapp.com/)
 * Accessing the **network** and **wallet**
     * Access **Alice** by clicking [here](https://bitx-client1.herokuapp.com/)
     * Access **Bob** by clicking [here](https://bitx-client2.herokuapp.com/)
